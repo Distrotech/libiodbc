@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Iodbc by Distrotech</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Iodbc</h1>
+          <h2>An open-source ODBC driver manager and SDK that facilitates the development of database-independent applications on linux, freebsd, unix and MacOS X platforms.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/Distrotech/iODBC/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/Distrotech/iODBC/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/Distrotech/iODBC" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <p>iODBC Driver Manager
+Copyright (C) 1995 by Ke Jin <a href="mailto:kejin@empress.com">kejin@empress.com</a>
+Copyright (C) 1996-2013 by OpenLink Software <a href="mailto:iodbc@openlinksw.com">iodbc@openlinksw.com</a>
+All Rights Reserved.</p>
+
+<ol>
+<li>
+<p>Introduction</p>
+
+<p>Welcome to the iODBC driver manager maintained by OpenLink Software
+(<a href="http://www.openlinksw.com/">http://www.openlinksw.com/</a>). This kit will provide you with
+everything you need in order to develop ODBC-compliant applications
+under Unix without having to pay royalties to other parties.</p>
+
+<p>This kit consists of a number of parts:</p>
+
+<p>o  The iODBC driver manager. This is a complete implementation of
+  an ODBC driver manager, released under either the GNU Library
+  General Public License or the BSD License. We fully comply with
+  these licenses by giving you this product in source form (as well
+  as the binary form). You can download the latest version of the
+  driver manager from <a href="http://www.iodbc.org/">http://www.iodbc.org/</a></p>
+
+<p>o  A simple example, iodbctest.c, which gives you a command-line
+  interface to SQL. You can fit this to your purposes, but at the very
+  least this is useful for verification of your ODBC installation.</p>
+
+<p>You can use either part stand-alone, if you wish.</p>
+
+<p>An ODBC driver is still needed to affect your connection
+architecture. You may build a driver with the iODBC components or
+obtain an ODBC driver from a commercial vendor. OpenLink Software
+produces cross-platform commercial drivers as well as maintaining
+the iODBC distribution: evaluation copies may be obtained via
+download from <a href="http://www.openlinksw.com/">http://www.openlinksw.com/</a>. Any ODBC-compliant
+driver will work with the iODBC Driver Manager.</p>
+
+<p>See also the iODBC website, <a href="http://www.iodbc.org/">http://www.iodbc.org/</a>, for more pointers
+to various ODBC drivers.</p>
+</li>
+<li>
+<p>Installation of run-time distribution</p>
+
+<p>You probably already unpacked this distribution. The next step is
+to make sure that your applications can find all the dynamic link
+libraries. Depending on your system's implementation of dynamic link
+libraries, you have a number of options:</p>
+
+<p>o  Install the libraries in a directory that is searched by your
+  linker by default. Typical locations are /usr/lib and
+  /usr/local/lib.</p>
+
+<p>o  Install the libraries in some other place, and make sure that the
+  environment variable your dynamic linker uses to find extra
+  locations for dynamic link libraries. Most systems use the
+  environment variable LD_LIBRARY_PATH to this end. Exceptions are
+  AIX which uses LIBPATH and HP/UX which uses SHLIB_PATH.</p>
+
+<p>If your system has a C compiler, you can verify the installation
+  by compiling the iodbctest program. Otherwise, you may have ODBC
+  applications installed on your system which you can use.</p>
+</li>
+<li>
+<p>Configuration of run-time distribution</p>
+
+<p>The iODBC driver manager looks for a file ~/.odbc.ini, where the
+tilde stands for the user's home directory. This file only contains a
+default section where you can select which driver library to use. Copy
+the odbc.ini file from the examples directory to ~/.odbc.ini and make
+sure the right path and filename is used for your installation.</p>
+
+<p>A data source is a section (enclosed in square parenthesis), and
+the attributes for a data source are given within this section.
+The most important attribute to iODBC for each datasource is the Driver
+attribute. This must point to the shared library for the ODBC driver
+associated with the data source.</p>
+
+<p>As example, the OpenLink ODBC drivers have a number of attributes
+which can be set for a data source. Here is a description (with ODBC
+connect string tags between parenthesis):</p>
+
+<p>Host
+    The hostname where the database resides (HOST).</p>
+
+<p>ServerType
+    The type of server (see oplrqb.ini on the server, SVT).</p>
+
+<p>ServerOptions
+    Server-specific extra options. See OpenLink server documentation
+    for agents which can use this.</p>
+
+<p>Database
+    The database to use (DATABASE).</p>
+
+<p>Options
+    Connect options for the database (OPTIONS).</p>
+
+<p>UserName
+    The name of the user (a password cannot be specified in the
+    UDBCINI file, UID/PWD).</p>
+
+<p>ReadOnly
+    A Yes/No value in order to make the connection read-only
+    (READONLY=Y/N).</p>
+
+<p>FetchBufferSize
+    The number of records that are transferred in a single call to
+    the server. Default is 5; maximum is 99, minimum is 1
+    (FBS=value).</p>
+
+<p>Protocol
+    The protocol to use. Leave set to ``TCP'' for this release.</p>
+
+<p>Apart from these data source-specific settings, you may add a section
+called [Communications], which you may use to tune our driver further:</p>
+
+<p>ReceiveTimeout
+    The time the client application will wait for the database agent
+    to finish the request (default is 60 seconds).</p>
+
+<p>BrokerTimeout
+    The time the client application will wait for the request broker
+    to accept of reject a database connection (default is 30
+    seconds).</p>
+
+<p>SendSize
+    RPC send buffer size. A value of 0 (the default) will cause the
+    application to use system-dependent defaults.</p>
+
+<p>ReceiveSize
+    RPC receive buffer size. A value of 0 (the default) will cause
+    the application to use system-dependent defaults.</p>
+
+<p>DebugFile
+    If set, the name of a file to which debugging output from the
+    driver should be directed.</p>
+</li>
+<li>
+<p>Contribution of changes, patches and updates.</p>
+
+<p>While not mandated by the BSD license, any patches you make to
+the iODBC may be contributed back into the iODBC project at
+your discretion. Contributions will benefit the Open Source and
+Data Access community as a whole. Submissions may be made at
+<a href="http://www.iodbc.org/">http://www.iodbc.org/</a>.</p>
+</li>
+<li>
+<p>iODBC driver manager platform availability</p>
+
+<p>The iODBC driver manager has been ported to following Unix platforms:</p>
+
+<p>BSDi BSD/OS     2.x     ?
+DEC Unix(OSF/1) 3.x - 5.x   DEC Alpha
+DG/UX       5.x     Aviion
+FreeBSD     2.x - 5.x   x86
+HP/UX       9.x - 11.x  HP9000 s700/s800
+HP/UX       9.x         HP9000 s300/s400
+IBM AIX     3.x - 5.x   IBM RS6000, PowerPC
+Linux ELF   1.x,  2.x   x86, Itanium, PowerPC
+Mac OS X    10.x        PowerPC
+Max/OS SVR4 1.x     Concurrent Maxion 9200 MP
+NCR SVR4    3.x     NCR 3435
+OpenVMS     6.x     DEC Alpha
+SCO OpenServer  5.x         x86
+SGI Irix SVR4   5.x, 6.x    IP12 MIPS, IP22 MIPS
+SunOS       4.1.x       Sun Sparc
+Sun Solaris 2.x     Sun Sparc, PCx86
+UnixWare SVR4.2 1.x, 2.x    x86
+Windows NT  4.x     x86</p>
+
+<p>As the iODBC driver manager uses autoconf/automake/libtool it should
+be portable to most modern UNIX platforms out of the box. However if
+you do need to make changes to the code or the configuration files,
+we would appreciate you share your changes with the rest of the
+internet community by mailing your patches to <a href="mailto:iodbc@openlinksw.com">iodbc@openlinksw.com</a>
+so we can include them for the next build.</p>
+
+<p>Porting of iODBC driver manager to some non-UNIX operating systems
+such as Windows family(3.x, 95, NT), OS/2 and Mac Classic is
+supported but has not been compiled and tested recently. Of cause,
+you need to supply a make/build file and a short LibMain for creating
+the iodbc.dll.</p>
+</li>
+<li>
+<p>How to build iODBC driver manager:</p>
+
+<p>Mac OS X users should read the separate README.MACOSX document for
+more detail of porting on this platform. Otherwise:</p>
+
+<p>step 1. Run configure to adjust to target platform
+step 2. Run make
+step 3. Run make install</p>
+
+<p>The configure program will examine your system for various compiler
+flags, system options etc. In some cases extra flags need to be
+added for the C compiler to work properly.</p>
+
+<p>E.g. on HP systems you may need:</p>
+
+<p>$ CFLAGS="-Ae -O" ./configure --prefix=/usr/local ..........</p>
+
+<h2>
+<a name="file-hierarchy" class="anchor" href="#file-hierarchy"><span class="octicon octicon-link"></span></a>File Hierarchy</h2>
+
+<p>Note that the path of the system wide odbc.ini file is calculated as
+follows (based on flags to ./configure):</p>
+
+<p>no --prefix         default is /etc/odbc.ini
+--prefix=/usr           /etc/odbc.ini
+--prefix=/xxx/yyy       /xxx/yyy/etc/odbc.ini
+--sysconfdir=/xxx/yyy       /xxx/yyy/odbc.ini
+--with-iodbc-inidir=/xxx/yyy    /xxx/yyy/odbc.ini</p>
+
+<p>If the <code>--with-layout=' option is set, then the prefix and
+sysconfdir parameters will be changed accordingly. Currently, this
+parameter understands values of</code>gentoo', <code>redhat',</code>gnu',
+<code>debian' or</code>opt' (with everything going into /opt/iodbc/). If
+both are specified, a --prefix argument will overrule a --with-layout.</p>
+
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p>$ ./configure --prefix=/usr/local --with-iodbc-inidir=/etc
+...
+...
+...
+$ make
+...
+...
+...
+$ su</p>
+
+<h1>
+<a name="make-install" class="anchor" href="#make-install"><span class="octicon octicon-link"></span></a>make install</h1>
+
+<p>...
+...
+...</p>
+</li>
+<li>
+<p>odbc.ini</p>
+
+<p>Driver manager and drivers use odbc.ini file or connection string
+when establishing a data source connection. On Windows, odbc.ini is
+located in Windows directory.</p>
+
+<p>On UNIX, the iODBC driver manager looks for the odbc.ini file in the
+following sequence:</p>
+
+<ol>
+<li>check environment variable ODBCINI</li>
+<li>check $HOME/.odbc.ini</li>
+<li>check home in /etc/passwd and try .odbc.ini in there</li>
+<li>system-wide odbc.ini (settable at configuration time)</li>
+</ol>
+<p>Item 1 is the easiest as most drivers will also look at this variable.</p>
+
+<p>The format of odbc.ini( or ~/.odbc.ini ) is defined as:</p>
+
+<p>odbc.ini      ::= data_source_list</p>
+
+<p>data_source_list  ::= /* empty */
+           | data_source '\n' data_source_list</p>
+
+<p>data_source   ::= '[' data_source_name ']' '\n' data_source_desc</p>
+
+<p>data_source_name  ::= 'default' | [A-Za-z]*[A-Za-z0-9_]*</p>
+
+<p>data_source_desc  ::= /* empty */
+           | attrib_desc '\n' data_source_desc</p>
+
+<p>addrib_desc   ::= Attrib '=' attrib_value</p>
+
+<p>Attrib        ::= 'Driver' | 'PID' | 'UID' | driver_def_attrib</p>
+
+<p>driver_def_attrib ::= [A-Za-z]*[A-Za-z0-9_]*</p>
+
+<p>An example of an odbc.ini file:</p>
+
+<p>;
+;  odbc.ini
+;
+[ODBC Data Sources]
+Myodbc      = Myodbc
+Sample      = OpenLink Generic ODBC Driver
+Virtuoso    = Virtuoso</p>
+
+<p>[ODBC]
+TraceFile       = /tmp/odbc.trace
+Trace           = 0 ; set to 1 to enable tracing</p>
+
+<p>[Sample]
+Driver          = /usr/local/openlink/lib/oplodbc.so.1
+Description     = Sample OpenLink DSN
+Host            = localhost
+UserName        = openlink
+Password        = xxxx
+ServerType      = Oracle 8.1.x
+Database        =
+FetchBufferSize = 99
+ReadOnly        = no</p>
+
+<p>[Virtuoso]
+Driver      = /usr/local/virtuoso/lib/virtodbc.so.1
+Address     = localhost:1112
+Database    = Demo</p>
+
+<p>[Myodbc]
+Driver      = /usr/lib/libmyodbc.so
+HOST        = localhost</p>
+
+<p>[Default]
+Driver      = /usr/local/openlink/lib/oplodbc.so.1</p>
+</li>
+<li>
+<p>Tracing</p>
+
+<p>iODBC driver manager traces driver's ODBC call invoked by the driver
+manager. Default tracing file is ./odbc.log. Tracing option (i.e.
+on/off or optional tracing file name) can be set in odbc.ini file
+under the [ODBC] heading as:</p>
+
+<p>[ODBC]
+TraceFile = 
+Trace = ON | On | on | 1 | OFF | Off | off | 0</p>
+
+<p>If  is stderr or stdout, i.e.</p>
+
+<pre><code>TraceFile = stderr
+</code></pre>
+
+<p>or</p>
+
+<p>TraceFile = stdout</p>
+
+<p>the tracing message will go to the terminal screen (if it is available).</p>
+</li>
+<li>
+<p>Further Information Sources:</p>
+
+<p><a href="http://www.iodbc.org/">http://www.iodbc.org/</a>
+iODBC project home page.
+Binaries, source, documentation</p>
+
+<p><a href="http://sourceforge.net/projects/iodbc">http://sourceforge.net/projects/iodbc</a>
+Source, CVS tree, mailing lists, forums, bug reports</p>
+
+<p><a href="http://www.openlinksw.com/">http://www.openlinksw.com/</a>
+OpenLink Software.
+Free trials and support for OpenLink's ODBC drivers.</p>
+
+<p><a href="http://www.microsoft.com/data/odbc/">http://www.microsoft.com/data/odbc/</a>
+Microsoft's ODBC pages.</p>
+</li>
+</ol>
+        </section>
+
+        <footer>
+          Iodbc is maintained by <a href="https://github.com/Distrotech">Distrotech</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
